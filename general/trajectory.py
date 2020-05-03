@@ -8,7 +8,7 @@ def trajectory(signalData, maxEmDim, timeDelay):
     generated for a specified time delay.
 
     Parameters:
-    signalData: a numpy array (nx1), representing the signal data to be analyzed and
+    signalData: a numpy array (nx1), representing the signal data to be analyzed
     maxEmDim: a float, representing the maximum embedding dimension for which the trajectory (portrait)is to be
               constructed
     timeDelay: an integer, representing the time delay to apply to the signal data
