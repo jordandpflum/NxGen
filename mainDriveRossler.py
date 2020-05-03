@@ -4,6 +4,8 @@ import numpy as np
 from mpl_toolkits import mplot3d  # needed to plot 3D
 import matplotlib.pyplot as plt
 
+from general.mutualInformation.mutualInformationWTS import mutualInformationWTS
+
 # Rossler parameters: Paper
 a = 0.2
 b = 0.2
@@ -22,6 +24,7 @@ num_points = 4096
 rossler_data = rossler_generate(num_points=num_points, initial_state=initial_condition, parameters=np.array([a, b, c]),
                                 dt=dt)
 
+'''
 # Plot Rossler Attractor
 fig = plt.figure(figsize=(13, 9))
 ax = fig.gca(projection='3d')
@@ -117,3 +120,20 @@ ax.set_ylabel('X(t + tau)', rotation=0)
 ax.set_zlabel('X(t + 2tau)', rotation=180)
 ax.set_title('Rossler Reconstructed with tau=8, steps=0.40', loc='center')
 plt.show()
+
+'''
+
+signalData = rossler_data[0, :]  # First factor (X component) of Rossler Attractor
+maxTimeDelay = 100
+mutualInformation = mutualInformationWTS(signalData,maxTimeDelay)
+
+fig = plt.figure(figsize=(13, 9))
+ax = fig.add_subplot()
+ax.plot(mutualInformation[:, 0], mutualInformation[:, 1], 'blue')
+ax.set_xlabel('Time Shift Tau', rotation=0)
+ax.set_ylabel('Mutual Information (bits)', rotation=90)
+ax.set_title('Mutual Information for Rossier Attractor', loc='center')
+plt.show()
+
+
+
