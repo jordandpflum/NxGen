@@ -17,10 +17,10 @@ def generate_system(num_points, odes, initial_state, parameters, dt):
     Returns: results, a numpy array, representing the solved points of the ODES
     """
     # Create matrix to store results [n_states x data_length)
-    results = np.zeros([initial_state.shape[0], num_points])
+    results = np.zeros([num_points, initial_state.shape[0]])
 
     # Store Initial State
-    results[:, 0] = initial_state
+    results[0, :] = initial_state
 
     # Initialize state as initial_state
     state = initial_state
@@ -31,6 +31,6 @@ def generate_system(num_points, odes, initial_state, parameters, dt):
         state = rk4_singleStep(odes, state, parameters, dt)
 
         # Append state to results
-        results[:, point + 1] = state
+        results[point + 1, :] = state
 
     return results
