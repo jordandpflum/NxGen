@@ -1,8 +1,10 @@
 from dynamicSystems.rosslerAttractor import rossler_generate
 from general.trajectory import trajectory
 import numpy as np
-from mpl_toolkits import mplot3d  # needed to plot 3D
-import matplotlib.pyplot as plt
+
+# Plotting
+from general.Plotting.graphicalPlotting import generate3Dplot
+from general.Plotting.graphicalPlotting import generate2Dplot
 
 from general.mutualInformation.mutualInformationWTS import mutualInformationWTS
 
@@ -23,117 +25,87 @@ num_points = 4096
 # Generate Rossler Attractor
 rossler_data = rossler_generate(num_points=num_points, initial_state=initial_condition, parameters=np.array([a, b, c]),
                                 dt=dt)
-
 '''
 # Plot Rossler Attractor
-fig = plt.figure(figsize=(13, 9))
-ax = fig.gca(projection='3d')
-ax.set_ylim(-15, 10)
-ax.set_xlim(-10, 15)
-ax.set_zlim(0, 25)
-ax.view_init(25, -130)
-ax.plot(rossler_data[0], rossler_data[1], rossler_data[2], 'blue')
-ax.set_xlabel('X(t)', rotation=0)
-ax.set_ylabel('Y(t)', rotation=0)
-ax.set_zlabel('Z(t)', rotation=0)
-ax.set_title('The Rossler Attractor', loc='center')
-plt.show()
+generate3Dplot(rossler_data,
+               title='The Rossler Attractor',
+               axis_labels=('X(t)', 'Y(t)', 'Z(t)'),
+               axis_lim=([-10, 15], [-10, 15], [0, 25]))
 
 # Trajectory: Paper Replications
 
 # Tau: 32
 # Compute Trajectory
-signalData = rossler_data[0, :]  # First factor (X component) of Rossler Attractor
+signalData = rossler_data[:, 0]  # First factor (X component) of Rossler Attractor
 maxEmDim = 3
 timeDelay = 32
 portrait, noPoints, maxPosEmDim = trajectory(signalData, maxEmDim, timeDelay)
 # Plot
-fig = plt.figure(figsize=(13, 9))
-ax = fig.gca(projection='3d')
-ax.set_xlim(-10, 15)
-ax.set_ylim(-10, 15)
-ax.set_zlim(-10, 15)
-ax.view_init(25, -130)
-ax.plot(portrait[:, 0], portrait[:, 1], portrait[:, 2], 'blue')
-ax.set_xlabel('X(t)', rotation=0)
-ax.set_ylabel('X(t + tau)', rotation=0)
-ax.set_zlabel('X(t + 2tau)', rotation=180)
-ax.set_title('Rossler Reconstructed with tau=32, steps=1.6', loc='center')
-plt.show()
+generate3Dplot(data=portrait,
+               title='Rossler Reconstructed with tau=32, steps=1.6',
+               axis_labels=('X(t)', 'X(t + tau)', 'X(t + 2tau)'),
+               axis_lim=([-10, 15], [-10, 15], [-10, 15])
+               )
 
 # Tau: 63
 # Compute Trajectory
-signalData = rossler_data[0, :]  # First factor (X component) of Rossler Attractor
+signalData = rossler_data[:, 0]  # First factor (X component) of Rossler Attractor
 maxEmDim = 3
 timeDelay = 63
 portrait, noPoints, maxPosEmDim = trajectory(signalData, maxEmDim, timeDelay)
 # Plot
-fig = plt.figure(figsize=(13, 9))
-ax = fig.gca(projection='3d')
-ax.set_xlim(-10, 15)
-ax.set_ylim(-10, 15)
-ax.set_zlim(-10, 15)
-ax.view_init(25, -130)
-ax.plot(portrait[:, 0], portrait[:, 1], portrait[:, 2], 'blue')
-ax.set_xlabel('X(t)', rotation=0)
-ax.set_ylabel('X(t + tau)', rotation=0)
-ax.set_zlabel('X(t + 2tau)', rotation=270)
-ax.set_title('Rossler Reconstructed with tau=63, steps=3.15', loc='center')
-plt.show()
+generate3Dplot(data=portrait,
+               title='Rossler Reconstructed with tau=63, steps=3.15',
+               axis_labels=('X(t)', 'X(t + tau)', 'X(t + 2tau)'),
+               axis_lim=([-10, 15], [-10, 15], [-10, 15])
+               )
 
 # Tau: 17
 # Compute Trajectory
-signalData = rossler_data[0, :]  # First factor (X component) of Rossler Attractor
+signalData = rossler_data[:, 0]  # First factor (X component) of Rossler Attractor
 maxEmDim = 3
 timeDelay = 17
 portrait, noPoints, maxPosEmDim = trajectory(signalData, maxEmDim, timeDelay)
 # Plot
-fig = plt.figure(figsize=(13, 9))
-ax = fig.gca(projection='3d')
-ax.set_xlim(-10, 15)
-ax.set_ylim(-10, 15)
-ax.set_zlim(-10, 15)
-ax.view_init(25, -130)
-ax.plot(portrait[:, 0], portrait[:, 1], portrait[:, 2], 'blue')
-ax.set_xlabel('X(t)', rotation=0)
-ax.set_ylabel('X(t + tau)', rotation=0)
-ax.set_zlabel('X(t + 2tau)', rotation=90)
-ax.set_title('Rossler Reconstructed with tau=17, steps=0.85', loc='center')
-plt.show()
+generate3Dplot(data=portrait,
+               title='Rossler Reconstructed with tau=17, steps=0.85',
+               axis_labels=('X(t)', 'X(t + tau)', 'X(t + 2tau)'),
+               axis_lim=([-10, 15], [-10, 15], [-10, 15])
+               )
 
 # Tau: 8
 # Compute Trajectory
-signalData = rossler_data[0, :]  # First factor (X component) of Rossler Attractor
+signalData = rossler_data[:, 0]  # First factor (X component) of Rossler Attractor
 maxEmDim = 3
 timeDelay = 8
 portrait, noPoints, maxPosEmDim = trajectory(signalData, maxEmDim, timeDelay)
 # Plot
-fig = plt.figure(figsize=(13, 9))
-ax = fig.gca(projection='3d')
-ax.set_xlim(-10, 15)
-ax.set_ylim(-10, 15)
-ax.set_zlim(-10, 15)
-ax.view_init(25, -130)
-ax.plot(portrait[:, 0], portrait[:, 1], portrait[:, 2], 'blue')
-ax.set_xlabel('X(t)', rotation=0)
-ax.set_ylabel('X(t + tau)', rotation=0)
-ax.set_zlabel('X(t + 2tau)', rotation=180)
-ax.set_title('Rossler Reconstructed with tau=8, steps=0.40', loc='center')
-plt.show()
-
+generate3Dplot(data=portrait,
+               title='Rossler Reconstructed with tau=8, steps=0.40',
+               axis_labels=('X(t)', 'X(t + tau)', 'X(t + 2tau)'),
+               axis_lim=([-10, 15], [-10, 15], [-10, 15])
+               )
 '''
 
-signalData = rossler_data[0, :]  # First factor (X component) of Rossler Attractor
-maxTimeDelay = 100
-mutualInformation = mutualInformationWTS(signalData,maxTimeDelay)
 
-fig = plt.figure(figsize=(13, 9))
-ax = fig.add_subplot()
-ax.plot(mutualInformation[:, 0], mutualInformation[:, 1], 'blue')
-ax.set_xlabel('Time Shift Tau', rotation=0)
-ax.set_ylabel('Mutual Information (bits)', rotation=90)
-ax.set_title('Mutual Information for Rossier Attractor', loc='center')
-plt.show()
+# Calculate Optimal Choice of Time Shift Tau
+# Create Signal Data
+signalData = rossler_data[:, 0]  # First factor (X component) of Rossler Attractor
+
+# Set Max Time Delay when calculating Mutual Information
+maxTimeDelay = 100
+
+# Calculate Mutual Information for every time delay
+mutualInformation = mutualInformationWTS(signalData, maxTimeDelay)
+
+# Plot Mutual Information
+generate2Dplot(data=mutualInformation,
+               title='Mutual Information for Rossier Attractor',
+               axis_labels=('Time Shift Tau', 'Mutual Information (bits)'),
+               axis_lim_inc=False
+               )
+
+# Get Optimal Choice of Time Shift Tau
 
 
 
