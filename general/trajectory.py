@@ -20,7 +20,6 @@ def trajectory(signalData, maxEmDim, timeDelay):
                        the corrdinate of that point.
     """
     indexes = np.arange(0, maxEmDim, 1) * timeDelay
-    print(indexes)
     portrait = np.array([signalData[indexes + i] for i in range(len(signalData) - (maxEmDim - 1) * timeDelay)])
     return portrait
 
