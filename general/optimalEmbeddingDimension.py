@@ -93,7 +93,12 @@ def grassberg_procaccia(timeseries, emb_dim, time_delay, plot=False):
     D = np.mean(gradients[-5:])
 
     if plot:
-        plt.plot(np.log(r_vals), np.log(C_r))
+        fig = plt.figure(figsize=(13, 9))
+        ax = fig.add_subplot()
+        ax.plot(np.log(r_vals), np.log(C_r), 'blue')
+        ax.set_xlabel('log(r)', rotation=0)
+        ax.set_ylabel('log(C(r)', rotation=90)
+        ax.set_title('Correlation Dimension', loc='center')
         plt.show()
 
     return D
