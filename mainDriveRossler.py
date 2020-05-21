@@ -14,6 +14,10 @@ from general.optimalTau import generateOptimalTau
 # Embedding Dimension
 from general.optimalEmbeddingDimension import grassberg_procaccia
 
+# Auto Correlation
+from statsmodels.graphics.tsaplots import plot_acf
+from statsmodels.tsa.stattools import acf
+
 # Rossler parameters: Paper
 a = 0.2
 b = 0.2
@@ -104,7 +108,12 @@ generate3Dplot(data=portrait,
 # Create Signal Data
 signalData = rossler_data[:, 0]  # First factor (X component) of Rossler Attractor
 
-'''
+
+# Autocorrelation
+plot_acf(signalData, lags= 200, alpha=0.05)
+signalData_ACF = acf(signalData)
+
+# Mutual Information
 # Set Max Time Delay when calculating Mutual Information
 maxTimeDelay = 100
 
@@ -117,7 +126,7 @@ generate2Dplot(data=mutualInformation,
                axis_labels=('Time Shift Tau', 'Mutual Information (bits)'),
                axis_lim_inc=False
                )
-'''
+
 
 # Get Optimal Choice of Time Shift Tau
 
@@ -130,15 +139,16 @@ timeDelay = optimalTau
 portrait = trajectory(signalData, maxEmDim, timeDelay)
 
 # Plot
-'''
+
 generate3Dplot(data=portrait,
                title='Rossler Reconstructed with tau=' + str(timeDelay),
                axis_labels=('X(t)', 'X(t + tau)', 'X(t + 2tau)'),
                axis_lim=([-10, 15], [-10, 15], [-10, 15])
                )
-'''
 
-corr_dim = grassberg_procaccia(signalData, 3, timeDelay, plot=True)
-print(corr_dim)
 
+corr_dim_portrait = grassberg_procaccia(portrait, 3, timeDelay, plot=True)
+print('Estimated Fractal Dimension of Recreated Attractor: ' + str(corr_dim_portrait))
+corr_dim_lorenz = grassberg_procaccia(rossler_data, 3, timeDelay, plot=True)
+print('Estimated Fractal Dimension of Rossler Attractor: ' + str(corr_dim_lorenz))
 
