@@ -14,7 +14,11 @@ from general.optimalTau import generateOptimalTau
 # Embedding Dimension
 from general.optimalEmbeddingDimension import grassberg_procaccia
 
-# Rossler parameters: Paper
+# Auto Correlation
+from statsmodels.graphics.tsaplots import plot_acf
+from statsmodels.tsa.stattools import acf
+
+# Lorenz parameters
 sigma = 10
 b = 8/3
 r = 28
@@ -34,11 +38,11 @@ dt = 0.05
 num_points = 4096
 # tspan = np.arange(start=dt, stop=dt*num_points, step=dt)
 
-# Generate Rossler Attractor
+# Generate Lorenz Attractor
 lorenz_data = lorenz_generate(num_points=num_points, initial_state=initial_condition, parameters=np.array([sigma, b, r]),
                                 dt=dt)
 
-# Plot Rossler Attractor
+# Plot Lorenz Attractor
 generate3Dplot(lorenz_data,
                title='The Lorenz Attractor',
                axis_labels=('X(t)', 'Y(t)', 'Z(t)'),
@@ -49,7 +53,12 @@ generate3Dplot(lorenz_data,
 # Create Signal Data
 signalData = lorenz_data[:, 0]  # First factor (X component) of Rossler Attractor
 
-'''
+
+# Autocorrelation
+plot_acf(signalData, lags= 200, alpha=0.05)
+signalData_ACF = acf(signalData)
+
+# Mutual Information
 # Set Max Time Delay when calculating Mutual Information
 maxTimeDelay = 100
 
@@ -62,7 +71,6 @@ generate2Dplot(data=mutualInformation,
                axis_labels=('Time Shift Tau', 'Mutual Information (bits)'),
                axis_lim_inc=False
                )
-'''
 
 # Get Optimal Choice of Time Shift Tau
 
@@ -75,16 +83,16 @@ timeDelay = optimalTau
 portrait = trajectory(signalData, maxEmDim, timeDelay)
 
 # Plot
-'''
 generate3Dplot(data=portrait,
                title='Rossler Reconstructed with tau=' + str(timeDelay),
                axis_labels=('X(t)', 'X(t + tau)', 'X(t + 2tau)'),
                axis_lim=([-10, 15], [-10, 15], [-10, 15])
                )
-'''
 
 # corr_dim = grassberg_procaccia(signalData, 3, timeDelay, plot=True)
 from general.optimalEmbeddingDimension import grassberg_procaccia_test
-corr_dim = grassberg_procaccia_test(lorenz_data, True)
-print('Estimated Fractal Dimension: ' + str(corr_dim))
-print('Know Fractal Dimension: ~2.05')
+corr_dim_portrait = grassberg_procaccia(portrait, 3, timeDelay, plot=True)
+print('Estimated Fractal Dimension of Recreated Attractor: ' + str(corr_dim_portrait))
+corr_dim_lorenz = grassberg_procaccia(lorenz_data, 3, timeDelay, plot=True)
+print('Estimated Fractal Dimension of Lorenz Attractor: ' + str(corr_dim_lorenz))
+print('Know Fractal Dimension of Lorenz Attractor: ~2.05')
