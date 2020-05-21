@@ -1,20 +1,32 @@
 from dynamicSystems.rosslerAttractor import rossler_generate
 from general.trajectory import trajectory
+from general.trajectory import trajectory2
 import numpy as np
 
 # Plotting
 from general.Plotting.graphicalPlotting import generate3Dplot
 from general.Plotting.graphicalPlotting import generate2Dplot
 
+# Optimal Tau
 from general.mutualInformation.mutualInformationWTS import mutualInformationWTS
+from general.optimalTau import generateOptimalTau
+
+# Embedding Dimension
+from general.optimalEmbeddingDimension import grassberg_procaccia
 
 # Rossler parameters: Paper
 a = 0.2
 b = 0.2
 c = 5.7
 
+#a = 0.15
+#b = 0.2
+#c = 10
+
 # Initial condition (random, just interesting starting points)
 initial_condition = np.array([0, 0, 0])
+
+#initial_condition = np.array([0.5, 0, 0])
 
 # Set Time Parameters
 # Paper Parameters
@@ -92,6 +104,7 @@ generate3Dplot(data=portrait,
 # Create Signal Data
 signalData = rossler_data[:, 0]  # First factor (X component) of Rossler Attractor
 
+'''
 # Set Max Time Delay when calculating Mutual Information
 maxTimeDelay = 100
 
@@ -104,8 +117,28 @@ generate2Dplot(data=mutualInformation,
                axis_labels=('Time Shift Tau', 'Mutual Information (bits)'),
                axis_lim_inc=False
                )
+'''
 
 # Get Optimal Choice of Time Shift Tau
 
+optimalTau = generateOptimalTau(signalData, dimension=3, method="Minimizing MI over first (d-1) Tau")
+#optimalTau = generateOptimalTau(signalData, dimension=3, method="First Local Minimum")
+
+# Compute Trajectory
+maxEmDim = 3
+timeDelay = optimalTau
+portrait = trajectory(signalData, maxEmDim, timeDelay)
+
+# Plot
+'''
+generate3Dplot(data=portrait,
+               title='Rossler Reconstructed with tau=' + str(timeDelay),
+               axis_labels=('X(t)', 'X(t + tau)', 'X(t + 2tau)'),
+               axis_lim=([-10, 15], [-10, 15], [-10, 15])
+               )
+'''
+
+corr_dim = grassberg_procaccia(signalData, 3, timeDelay, plot=True)
+print(corr_dim)
 
 
