@@ -18,6 +18,11 @@ from general.optimalEmbeddingDimension import grassberg_procaccia
 from statsmodels.graphics.tsaplots import plot_acf
 from statsmodels.tsa.stattools import acf
 
+
+# Run Time
+import time
+
+
 # Rossler parameters: Paper
 a = 0.2
 b = 0.2
@@ -146,9 +151,14 @@ generate3Dplot(data=portrait,
                axis_lim=([-10, 15], [-10, 15], [-10, 15])
                )
 
-
+'''
+start_time = time.time()
 corr_dim_portrait = grassberg_procaccia(portrait, 3, timeDelay, plot=True)
 print('Estimated Fractal Dimension of Recreated Attractor: ' + str(corr_dim_portrait))
+print("--- %s seconds ---" % (time.time() - start_time))
+start_time = time.time()
 corr_dim_lorenz = grassberg_procaccia(rossler_data, 3, timeDelay, plot=True)
 print('Estimated Fractal Dimension of Rossler Attractor: ' + str(corr_dim_lorenz))
+print("--- %s seconds ---" % (time.time() - start_time))
+'''
 
